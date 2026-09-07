@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FactureKit — Factures & devis FR hors-ligne · 9,90 €</title>
+<meta name="description" content="Générez factures et devis conformes pour auto-entrepreneurs. 100 % hors-ligne, paiement unique 9,90 €. Essai gratuit.">
+<style>
+:root {
+  --bg: #0a0e14;
+  --card: #12181f;
+  --border: #243044;
+  --text: #eef2f7;
+  --muted: #94a3b8;
+  --accent: #3b82f6;
+  --accent2: #8b5cf6;
+  --ok: #22c55e;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; }
+a { color: var(--accent); }
+.container { width: min(1080px, 92%); margin: 0 auto; }
+.nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.1rem 0; border-bottom: 1px solid var(--border);
+}
+.logo { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.02em; }
+.logo span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; color: transparent; }
+.nav-links { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  border: none; border-radius: 10px; padding: 0.7rem 1.2rem; font-weight: 700;
+  font-size: 0.95rem; cursor: pointer; text-decoration: none; font-family: inherit;
+  transition: transform .12s, background .15s, box-shadow .15s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff;
+  box-shadow: 0 8px 24px rgba(59,130,246,.35);
+}
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-lg { padding: 0.95rem 1.6rem; font-size: 1.05rem; }
+
+.hero { padding: 4rem 0 3rem; display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; align-items: center; }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding-top: 2.5rem; } }
+.eyebrow {
+  display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #93c5fd; background: rgba(59,130,246,.12);
+  border: 1px solid rgba(59,130,246,.35); padding: 0.3rem 0.65rem; border-radius: 999px; margin-bottom: 1rem;
+}
+.hero h1 {
+  font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.15; letter-spacing: -0.03em;
+  margin-bottom: 1rem; font-weight: 800;
+}
+.hero h1 em { font-style: normal; background: linear-gradient(135deg, #60a5fa, #c084fc); -webkit-background-clip: text; color: transparent; }
+.hero p.lead { color: var(--muted); font-size: 1.1rem; margin-bottom: 1.5rem; max-width: 36rem; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
+.trust { color: var(--muted); font-size: 0.85rem; }
+
+/* Mock UI */
+.mock {
+  background: #0f1419; border: 1px solid var(--border); border-radius: 16px;
+  overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.45); transform: perspective(1000px) rotateY(-4deg) rotateX(2deg);
+}
+@media (max-width: 900px) { .mock { transform: none; } }
+.mock-bar {
+  background: #161b22; padding: 0.55rem 0.8rem; display: flex; gap: 0.35rem; align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.r { background: #ef4444; } .dot.y { background: #f59e0b; } .dot.g { background: #22c55e; }
+.mock-body { display: grid; grid-template-columns: 110px 1fr; min-height: 280px; }
+.mock-side { background: #161b22; padding: 0.75rem; border-right: 1px solid var(--border); }
+.mock-side .chip { height: 8px; background: #30363d; border-radius: 4px; margin-bottom: 0.45rem; }
+.mock-side .chip.w { width: 70%; } .mock-side .chip.a { background: var(--accent); width: 85%; height: 18px; }
+.mock-doc { background: #1a1f26; padding: 0.9rem; }
+.mock-paper {
+  background: #fff; color: #111; border-radius: 6px; padding: 0.9rem; font-size: 0.65rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,.3); min-height: 220px;
+}
+.mock-paper .mh { display: flex; justify-content: space-between; border-bottom: 2px solid #111; padding-bottom: 0.4rem; margin-bottom: 0.55rem; }
+.mock-paper .mt { font-weight: 800; font-size: 0.95rem; }
+.mock-paper .rowl { height: 7px; background: #e5e7eb; border-radius: 3px; margin: 0.3rem 0; }
+.mock-paper .tbl { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+.mock-paper .tbl th { background: #111; color: #fff; font-size: 0.55rem; padding: 0.25rem; text-align: left; }
+.mock-paper .tbl td { border-bottom: 1px solid #eee; padding: 0.25rem; font-size: 0.55rem; }
+.mock-paper .tot { text-align: right; font-weight: 800; margin-top: 0.5rem; }
+
+.section { padding: 3.5rem 0; }
+.section h2 { font-size: 1.75rem; letter-spacing: -0.02em; margin-bottom: 0.5rem; text-align: center; }
+.section .sub { text-align: center; color: var(--muted); margin-bottom: 2rem; }
+.benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+@media (max-width: 800px) { .benefits { grid-template-columns: 1fr; } }
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem;
+}
+.card .icon {
+  width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center;
+  background: rgba(59,130,246,.15); color: #93c5fd; font-size: 1.2rem; margin-bottom: 0.85rem;
+}
+.card h3 { font-size: 1.05rem; margin-bottom: 0.4rem; }
+.card p { color: var(--muted); font-size: 0.92rem; }
+
+.pricing {
+  background: linear-gradient(180deg, rgba(59,130,246,.08), transparent);
+  border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; text-align: center;
+  max-width: 520px; margin: 0 auto;
+}
+.price { font-size: 3.5rem; font-weight: 800; letter-spacing: -0.03em; margin: 0.5rem 0; }
+.price small { font-size: 1rem; font-weight: 600; color: var(--muted); }
+.price-note { color: var(--muted); margin-bottom: 1.25rem; }
+.features { text-align: left; list-style: none; margin: 1.25rem 0 1.5rem; }
+.features li { padding: 0.35rem 0; color: var(--text); font-size: 0.95rem; }
+.features li::before { content: "✓ "; color: var(--ok); font-weight: 800; }
+.waitlist {
+  margin-top: 1rem; padding: 1rem; background: #0d1117; border-radius: 12px; border: 1px solid var(--border);
+}
+.waitlist input {
+  width: 100%; padding: 0.7rem 0.85rem; border-radius: 8px; border: 1px solid var(--border);
+  background: #161b22; color: var(--text); font-size: 0.95rem; margin-bottom: 0.6rem; font-family: inherit;
+}
+.waitlist input:focus { outline: none; border-color: var(--accent); }
+#waitConfirm { display: none; color: var(--ok); font-weight: 600; margin-top: 0.6rem; font-size: 0.9rem; }
+.mailto-alt { margin-top: 0.75rem; font-size: 0.85rem; color: var(--muted); }
+
+.faq { max-width: 720px; margin: 0 auto; }
+.faq-item {
+  border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 0.75rem;
+  background: var(--card);
+}
+.faq-item h3 { font-size: 1rem; margin-bottom: 0.35rem; }
+.faq-item p { color: var(--muted); font-size: 0.92rem; }
+
+.cta-band {
+  text-align: center; padding: 3rem 1.5rem; border-radius: 20px;
+  background: linear-gradient(135deg, rgba(59,130,246,.2), rgba(139,92,246,.2));
+  border: 1px solid var(--border); margin: 1rem 0 3rem;
+}
+.cta-band h2 { margin-bottom: 0.75rem; }
+
+footer {
+  border-top: 1px solid var(--border); padding: 1.5rem 0 2.5rem; color: var(--muted); font-size: 0.8rem;
+  text-align: center;
+}
+footer .links { margin-bottom: 0.5rem; }
+footer a { color: var(--muted); text-decoration: none; margin: 0 0.5rem; }
+footer a:hover { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="nav">
+    <div class="logo">Facture<span>Kit</span></div>
+    <div class="nav-links">
+      <a class="btn btn-ghost" href="app/index.html">Essayer la démo</a>
+      <a class="btn btn-primary" href="#acheter">Acheter — 9,90 €</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">100 % hors-ligne · Paiement unique</div>
+      <h1>Factures & devis FR <em>propres</em>, sans abonnement.</h1>
+      <p class="lead">FactureKit est un générateur local pour freelances et auto-entrepreneurs. Mentions légales FR, TVA, aperçu A4, export PDF via impression — zéro cloud, zéro API payante.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="app/index.html">Essayer la démo gratuite</a>
+        <a class="btn btn-ghost btn-lg" href="#acheter">Acheter Pro — 9,90 €</a>
+      </div>
+      <p class="trust">✓ Fonctionne offline &nbsp;·&nbsp; ✓ Données sur votre navigateur &nbsp;·&nbsp; ✓ Prêt à imprimer / PDF</p>
+    </div>
+    <div class="mock" aria-hidden="true">
+      <div class="mock-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span style="margin-left:0.5rem;font-size:0.7rem;color:#8b949e">FactureKit — FAC-2026-001</span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-side">
+          <div class="chip a"></div>
+          <div class="chip w"></div>
+          <div class="chip"></div>
+          <div class="chip w"></div>
+          <div class="chip"></div>
+          <div class="chip w"></div>
+          <div class="chip"></div>
+        </div>
+        <div class="mock-doc">
+          <div class="mock-paper">
+            <div class="mh">
+              <div><strong>Alex Martin</strong><div class="rowl" style="width:70%"></div><div class="rowl" style="width:50%"></div></div>
+              <div class="mt">FACTURE</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.4rem">
+              <div><div class="rowl" style="width:40%"></div><div class="rowl"></div></div>
+              <div><div class="rowl" style="width:40%"></div><div class="rowl"></div></div>
+            </div>
+            <table class="tbl">
+              <thead><tr><th>Désignation</th><th>Qté</th><th>HT</th></tr></thead>
+              <tbody>
+                <tr><td>Prestation conseil</td><td>1</td><td>450,00 €</td></tr>
+                <tr><td>Déplacement</td><td>1</td><td>35,00 €</td></tr>
+              </tbody>
+            </table>
+            <div class="tot">Total TTC 582,00 €</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="avantages">
+    <h2>Pourquoi FactureKit ?</h2>
+    <p class="sub">Conçu pour les indépendants qui veulent aller vite, sans SaaS.</p>
+    <div class="benefits">
+      <div class="card">
+        <div class="icon">📄</div>
+        <h3>Factures & devis conformes</h3>
+        <p>Mentions auto-entrepreneur, art. 293 B CGI, pénalités de retard, numérotation FAC-2026-001, TVA 20 / 10 / 5,5 / 0 %.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔒</div>
+        <h3>100 % hors-ligne</h3>
+        <p>Ouvrez index.html dans votre navigateur. Broullons en localStorage. Aucune donnée envoyée, aucun compte obligatoire.</p>
+      </div>
+      <div class="card">
+        <div class="icon">⚡</div>
+        <h3>Aperçu live & PDF</h3>
+        <p>Prévisualisation A4 en temps réel. Imprimez ou « Enregistrer au format PDF » via le navigateur — CSS print soigné.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="acheter">
+    <h2>Tarif simple</h2>
+    <p class="sub">Un paiement. À vous pour toujours.</p>
+    <div class="pricing">
+      <div class="eyebrow">Licence Pro — usage perso / freelance</div>
+      <div class="price">9,90 € <small>TTC · une fois</small></div>
+      <p class="price-note">Pas d'abonnement. PayPal arrive bientôt — inscrivez-vous à la liste.</p>
+      <ul class="features">
+        <li>Lignes illimitées, sans filigrane</li>
+        <li>3 modèles : Classique, Minimal, Bold</li>
+        <li>Logo (stocké en local)</li>
+        <li>Catalogue produits réutilisable</li>
+        <li>Export / import JSON</li>
+        <li>Mises à jour mineures incluses</li>
+      </ul>
+      <a class="btn btn-primary btn-lg" href="#waitlist" onclick="document.getElementById('waitEmail').focus()">Acheter — lien PayPal bientôt</a>
+      <div class="waitlist" id="waitlist">
+        <label for="waitEmail" style="display:block;text-align:left;font-size:0.85rem;color:var(--muted);margin-bottom:0.35rem">Liste d'attente — laissez votre e-mail</label>
+        <input type="email" id="waitEmail" placeholder="vous@exemple.fr" autocomplete="email">
+        <button class="btn btn-primary" style="width:100%" type="button" onclick="joinWaitlist()">Me prévenir dès que PayPal est prêt</button>
+        <div id="waitConfirm">✓ Merci ! Vous êtes sur la liste. On vous écrit dès l'ouverture des ventes.</div>
+        <p class="mailto-alt">Ou écrivez-nous : <a href="mailto:hello@facturekit.fr?subject=FactureKit%20Pro%20—%20intérêt&body=Bonjour%2C%20je%20souhaite%20acheter%20FactureKit%20Pro%20(9%2C90%20€).">hello@facturekit.fr</a></p>
+      </div>
+      <p style="margin-top:1rem"><a class="btn btn-ghost" href="app/index.html">D'abord essayer la démo gratuite →</a></p>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <h2>FAQ</h2>
+    <p class="sub">Les questions fréquentes</p>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>C'est vraiment hors-ligne ?</h3>
+        <p>Oui. Après téléchargement, ouvrez le fichier HTML dans Chrome, Firefox, Edge ou Safari. Aucun serveur requis.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Quelle est la différence démo / Pro ?</h3>
+        <p>La démo limite à 3 lignes et affiche un filigrane « FactureKit démo » à l'impression. Pro retire ces limites et ajoute modèles, logo, catalogue et export JSON.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Comment obtenir un PDF ?</h3>
+        <p>Cliquez sur « Imprimer / PDF », puis choisissez « Enregistrer au format PDF » dans la boîte d'impression du navigateur.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Mes données sont-elles envoyées quelque part ?</h3>
+        <p>Non. Tout reste dans le localStorage de votre navigateur. Faites des exports JSON pour sauvegarder.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Remplace-t-il un expert-comptable ?</h3>
+        <p>Non. FactureKit aide à produire des documents propres ; il ne constitue pas un conseil juridique ou fiscal.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <h2>Prêt à facturer en 2 minutes ?</h2>
+    <p style="color:var(--muted);margin-bottom:1.25rem">Testez la démo, puis passez Pro pour 9,90 €.</p>
+    <a class="btn btn-primary btn-lg" href="app/index.html">Essayer la démo gratuite</a>
+  </div>
+
+  <footer>
+    <div class="links">
+      <a href="#avantages">Avantages</a>
+      <a href="#acheter">Tarifs</a>
+      <a href="#faq">FAQ</a>
+      <a href="app/index.html">Démo</a>
+      <a href="mailto:hello@facturekit.fr">Contact</a>
+    </div>
+    <p>© 2026 FactureKit — Produit numérique indépendant. Mentions légales simplifiées : éditeur particulier, France. Pas de cookies publicitaires. Paiement PayPal à venir.</p>
+  </footer>
+</div>
+<script>
+function joinWaitlist() {
+  const input = document.getElementById('waitEmail');
+  const email = (input.value || '').trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert('Veuillez entrer une adresse e-mail valide.');
+    input.focus();
+    return;
+  }
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem('facturekit_waitlist') || '[]'); } catch {}
+  if (!list.includes(email)) list.push(email);
+  localStorage.setItem('facturekit_waitlist', JSON.stringify(list));
+  document.getElementById('waitConfirm').style.display = 'block';
+  input.value = '';
+}
+</script>
+</body>
+</html>
