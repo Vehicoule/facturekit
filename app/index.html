@@ -1,1 +1,666 @@
-<!-- temporary placeholder -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FactureKit — Démo gratuite</title>
+<style>
+:root {
+  --bg: #0f1419;
+  --sidebar: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warn: #f59e0b;
+  --doc-bg: #f8fafc;
+  --radius: 10px;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+header.app-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1.25rem; background: var(--sidebar);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.logo { font-weight: 700; font-size: 1.15rem; letter-spacing: -0.02em; }
+.logo span { color: var(--accent); }
+.badge-demo {
+  background: var(--warn); color: #111; font-size: 0.7rem;
+  font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; margin-left: 0.5rem;
+}
+.bar-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.btn {
+  border: none; border-radius: 8px; padding: 0.5rem 0.9rem;
+  font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  transition: background .15s, transform .1s; font-family: inherit;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { background: #21262d; }
+.btn-success { background: var(--success); color: #fff; }
+.btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+.btn-sm { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+.layout {
+  display: grid; grid-template-columns: 380px 1fr; flex: 1; min-height: 0;
+}
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .preview-pane { display: none; }
+  .preview-pane.show-mobile { display: block; position: fixed; inset: 0; z-index: 50; background: #1a1a1a; overflow: auto; padding: 1rem; }
+}
+.sidebar {
+  background: var(--sidebar); border-right: 1px solid var(--border);
+  overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 1rem;
+}
+.panel {
+  background: #0d1117; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 0.9rem;
+}
+.panel h3 {
+  font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted); margin-bottom: 0.7rem; font-weight: 600;
+}
+.row { display: grid; gap: 0.5rem; margin-bottom: 0.5rem; }
+.row-2 { grid-template-columns: 1fr 1fr; }
+.row-3 { grid-template-columns: 1fr 1fr 1fr; }
+label { font-size: 0.7rem; color: var(--muted); display: block; margin-bottom: 0.2rem; }
+input, select, textarea {
+  width: 100%; background: #161b22; border: 1px solid var(--border);
+  color: var(--text); border-radius: 6px; padding: 0.45rem 0.55rem;
+  font-size: 0.85rem; font-family: inherit;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(59,130,246,.25);
+}
+textarea { resize: vertical; min-height: 60px; }
+.mode-toggle { display: flex; gap: 0.4rem; }
+.mode-toggle .btn { flex: 1; }
+.mode-toggle .btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.lines-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.line-card {
+  background: #161b22; border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.6rem;
+}
+.line-card .line-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+.line-card .line-num { font-size: 0.7rem; color: var(--muted); }
+.limit-banner {
+  background: rgba(245,158,11,.15); border: 1px solid var(--warn);
+  color: var(--warn); padding: 0.6rem; border-radius: 8px;
+  font-size: 0.8rem; line-height: 1.4;
+}
+.limit-banner a { color: #fbbf24; }
+.drafts-list { display: flex; flex-direction: column; gap: 0.35rem; max-height: 140px; overflow-y: auto; }
+.draft-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.4rem 0.5rem; background: #161b22; border-radius: 6px;
+  font-size: 0.8rem; cursor: pointer; border: 1px solid transparent;
+}
+.draft-item:hover { border-color: var(--accent); }
+.draft-item.active { border-color: var(--accent); background: #1a2332; }
+.preview-pane {
+  background: #1a1f26; overflow: auto; padding: 1.5rem;
+  display: flex; justify-content: center; align-items: flex-start;
+}
+.doc {
+  width: 210mm; min-height: 297mm; background: #fff; color: #1a1a1a;
+  padding: 18mm 16mm; box-shadow: 0 8px 40px rgba(0,0,0,.4);
+  font-size: 11pt; line-height: 1.45; position: relative;
+  font-family: 'Segoe UI', Georgia, serif;
+}
+.doc.tpl-minimal { font-family: system-ui, sans-serif; }
+.doc.tpl-minimal .doc-header { border-bottom: none; }
+.doc.tpl-bold .doc-title { font-size: 28pt; letter-spacing: -0.03em; }
+.doc.tpl-bold .doc-header { border-bottom: 4px solid #111; }
+.doc-watermark {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  pointer-events: none; z-index: 10;
+}
+.doc-watermark span {
+  font-size: 48pt; font-weight: 800; color: rgba(0,0,0,.07);
+  transform: rotate(-35deg); letter-spacing: 0.05em; white-space: nowrap;
+}
+.doc-header {
+  display: flex; justify-content: space-between; gap: 1.5rem;
+  border-bottom: 2px solid #111; padding-bottom: 1rem; margin-bottom: 1.25rem;
+}
+.doc-logo { max-height: 56px; max-width: 160px; object-fit: contain; margin-bottom: 0.5rem; }
+.doc-emitter { font-size: 9.5pt; color: #444; }
+.doc-emitter strong { display: block; font-size: 12pt; color: #111; margin-bottom: 0.2rem; }
+.doc-meta { text-align: right; }
+.doc-title { font-size: 22pt; font-weight: 800; color: #111; margin-bottom: 0.4rem; }
+.doc-meta-line { font-size: 9.5pt; color: #555; }
+.doc-parties {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;
+}
+.party-label { font-size: 8pt; text-transform: uppercase; letter-spacing: 0.08em; color: #888; margin-bottom: 0.25rem; }
+.party-box strong { display: block; font-size: 11pt; margin-bottom: 0.15rem; }
+.party-box { font-size: 9.5pt; color: #333; white-space: pre-line; }
+table.lines {
+  width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; font-size: 9.5pt;
+}
+table.lines th {
+  background: #111; color: #fff; text-align: left; padding: 0.45rem 0.5rem;
+  font-weight: 600; font-size: 8pt; text-transform: uppercase; letter-spacing: 0.04em;
+}
+table.lines th.num, table.lines td.num { text-align: right; }
+table.lines td { padding: 0.5rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+table.lines tr:nth-child(even) td { background: #f9fafb; }
+.totals {
+  display: flex; justify-content: flex-end; margin-bottom: 1.5rem;
+}
+.totals-box { width: 240px; font-size: 10pt; }
+.totals-row {
+  display: flex; justify-content: space-between; padding: 0.3rem 0;
+  border-bottom: 1px solid #eee;
+}
+.totals-row.ttc {
+  font-weight: 800; font-size: 12pt; border-bottom: none;
+  border-top: 2px solid #111; margin-top: 0.3rem; padding-top: 0.5rem;
+}
+.notes-block { font-size: 9pt; color: #555; margin-bottom: 1rem; white-space: pre-line; }
+.mentions { font-size: 8pt; color: #777; border-top: 1px solid #ddd; padding-top: 0.75rem; line-height: 1.5; }
+.toggle-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.4rem 0; font-size: 0.8rem; }
+.toggle-row input[type=checkbox] { width: auto; accent-color: var(--accent); }
+.mobile-preview-btn { display: none; }
+@media (max-width: 900px) {
+  .mobile-preview-btn { display: inline-flex; }
+}
+
+@media print {
+  body * { visibility: hidden !important; }
+  .preview-pane, .preview-pane *, .doc, .doc * { visibility: visible !important; }
+  .preview-pane {
+    position: absolute !important; left: 0; top: 0; width: 100% !important;
+    background: white !important; padding: 0 !important; overflow: visible !important;
+    display: block !important;
+  }
+  .doc {
+    box-shadow: none !important; width: 100% !important; min-height: auto !important;
+    padding: 12mm !important; margin: 0 !important;
+  }
+  .doc-watermark { display: flex !important; }
+  header, .sidebar, .mobile-close { display: none !important; }
+  @page { size: A4; margin: 10mm; }
+}
+</style>
+</head>
+<body>
+<header class="app-bar">
+  <div class="logo">Facture<span>Kit</span> <span class="badge-demo">DÉMO</span></div>
+  <div class="bar-actions">
+    <button class="btn btn-ghost mobile-preview-btn" onclick="toggleMobilePreview()">Aperçu</button>
+    <button class="btn btn-ghost" onclick="printDoc()">Imprimer / PDF</button>
+    <button class="btn btn-success" onclick="saveDraft()">Enregistrer</button>
+    <button class="btn btn-primary" onclick="newDoc()">Nouveau</button>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="panel">
+      <h3>Type de document</h3>
+      <div class="mode-toggle">
+        <button class="btn btn-ghost active" id="btnFacture" onclick="setMode('facture')">Facture</button>
+        <button class="btn btn-ghost" id="btnDevis" onclick="setMode('devis')">Devis</button>
+      </div>
+    </div>
+
+    <div class="limit-banner">
+      Version démo : max. <strong>3 lignes</strong> + filigrane à l'impression.
+      <a href="../index.html">Passer à Pro — 9,90 €</a>
+    </div>
+
+    <div class="panel">
+      <h3>Document</h3>
+      <div class="row row-2">
+        <div><label>Numéro</label><input id="numero" value="FAC-2026-001"></div>
+        <div><label>Date</label><input type="date" id="date"></div>
+      </div>
+      <div class="row">
+        <div><label id="labelEcheance">Date d'échéance</label><input type="date" id="echeance"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Émetteur</h3>
+      <div class="row"><div><label>Nom / Raison sociale</label><input id="emNom" placeholder="Jean Dupont"></div></div>
+      <div class="row"><div><label>Adresse</label><textarea id="emAdr" rows="2" placeholder="12 rue de la Paix&#10;75002 Paris"></textarea></div></div>
+      <div class="row row-2">
+        <div><label>SIRET</label><input id="emSiret" placeholder="123 456 789 00012"></div>
+        <div><label>Email</label><input id="emEmail" type="email" placeholder="contact@exemple.fr"></div>
+      </div>
+      <div class="row row-2">
+        <div><label>Téléphone</label><input id="emTel" placeholder="06 12 34 56 78"></div>
+        <div><label>IBAN (optionnel)</label><input id="emIban" placeholder="FR76…"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Client</h3>
+      <div class="row"><div><label>Nom</label><input id="clNom" placeholder="Client SAS"></div></div>
+      <div class="row"><div><label>Adresse</label><textarea id="clAdr" rows="2" placeholder="Adresse client"></textarea></div></div>
+      <div class="row"><div><label>Email</label><input id="clEmail" type="email"></div></div>
+    </div>
+
+    <div class="panel">
+      <h3>Lignes <span style="font-weight:400;text-transform:none;letter-spacing:0">(max 3)</span></h3>
+      <div class="lines-list" id="linesList"></div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:0.5rem;width:100%" onclick="addLine()">+ Ajouter une ligne</button>
+      <div class="row" style="margin-top:0.6rem">
+        <div><label>Remise globale (€ HT)</label><input type="number" id="remise" value="0" min="0" step="0.01" oninput="render()"></div>
+      </div>
+      <div class="row">
+        <div><label>TVA globale (applique à toutes les lignes)</label>
+          <select id="tvaGlobal" onchange="applyGlobalTva()">
+            <option value="">— Conserver par ligne —</option>
+            <option value="20">20 %</option>
+            <option value="10">10 %</option>
+            <option value="5.5">5,5 %</option>
+            <option value="0">0 % (exonéré)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Mentions & notes</h3>
+      <div class="toggle-row">
+        <input type="checkbox" id="franchise" onchange="render()">
+        <label for="franchise" style="margin:0;font-size:0.8rem;color:var(--text)">Franchise en base (art. 293 B CGI)</label>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="autoEnt" checked onchange="render()">
+        <label for="autoEnt" style="margin:0;font-size:0.8rem;color:var(--text)">Mention auto-entrepreneur</label>
+      </div>
+      <div class="row"><div><label>Notes</label><textarea id="notes" rows="2" placeholder="Conditions de paiement, délai…" oninput="render()"></textarea></div></div>
+      <div class="row"><div><label>Mentions légales (personnalisées)</label><textarea id="mentionsCustom" rows="2" oninput="render()"></textarea></div></div>
+    </div>
+
+    <div class="panel">
+      <h3>Brouillons (localStorage)</h3>
+      <div class="drafts-list" id="draftsList"></div>
+    </div>
+  </aside>
+
+  <main class="preview-pane" id="previewPane">
+    <button class="btn btn-ghost mobile-close mobile-preview-btn" style="position:sticky;top:0;margin-bottom:1rem" onclick="toggleMobilePreview()">Fermer l'aperçu</button>
+    <div class="doc" id="doc">
+      <div class="doc-watermark"><span>FactureKit démo</span></div>
+      <div id="docContent"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+const IS_PRO = false;
+const MAX_LINES = 3;
+const STORAGE_KEY = 'facturekit_drafts_v1';
+const PROFILE_KEY = 'facturekit_profile_v1';
+
+let mode = 'facture';
+let lines = [];
+let currentId = null;
+
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
+function addDays(d, n) {
+  const x = new Date(d); x.setDate(x.getDate() + n);
+  return x.toISOString().slice(0, 10);
+}
+function fmt(n) {
+  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n || 0);
+}
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function suggestNumero() {
+  const drafts = getDrafts();
+  const year = new Date().getFullYear();
+  const prefix = mode === 'facture' ? 'FAC' : 'DEV';
+  let max = 0;
+  drafts.forEach(d => {
+    const m = (d.numero || '').match(new RegExp(`^${prefix}-${year}-(\\d+)$`));
+    if (m) max = Math.max(max, parseInt(m[1], 10));
+  });
+  return `${prefix}-${year}-${String(max + 1).padStart(3, '0')}`;
+}
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btnFacture').classList.toggle('active', m === 'facture');
+  document.getElementById('btnDevis').classList.toggle('active', m === 'devis');
+  document.getElementById('labelEcheance').textContent = m === 'facture' ? "Date d'échéance" : 'Validité jusqu\'au';
+  const num = document.getElementById('numero').value;
+  if (!num || /^(FAC|DEV)-/.test(num)) {
+    document.getElementById('numero').value = suggestNumero();
+  }
+  render();
+}
+
+function defaultLine() {
+  return { designation: '', qte: 1, prix: 0, tva: 20 };
+}
+
+function addLine() {
+  if (!IS_PRO && lines.length >= MAX_LINES) {
+    alert('Démo limitée à 3 lignes. Passez à FactureKit Pro pour des lignes illimitées.');
+    return;
+  }
+  lines.push(defaultLine());
+  renderLinesEditor();
+  render();
+}
+
+function removeLine(i) {
+  lines.splice(i, 1);
+  if (lines.length === 0) lines.push(defaultLine());
+  renderLinesEditor();
+  render();
+}
+
+function renderLinesEditor() {
+  const el = document.getElementById('linesList');
+  el.innerHTML = lines.map((l, i) => `
+    <div class="line-card">
+      <div class="line-top">
+        <span class="line-num">Ligne ${i + 1}</span>
+        <button class="btn btn-danger btn-sm" onclick="removeLine(${i})">✕</button>
+      </div>
+      <div class="row"><div><label>Désignation</label>
+        <input value="${esc(l.designation)}" oninput="lines[${i}].designation=this.value;render()"></div></div>
+      <div class="row row-3">
+        <div><label>Qté</label><input type="number" min="0" step="0.01" value="${l.qte}" oninput="lines[${i}].qte=+this.value||0;render()"></div>
+        <div><label>Prix HT</label><input type="number" min="0" step="0.01" value="${l.prix}" oninput="lines[${i}].prix=+this.value||0;render()"></div>
+        <div><label>TVA %</label>
+          <select onchange="lines[${i}].tva=+this.value;render()">
+            ${[20,10,5.5,0].map(t => `<option value="${t}" ${l.tva===t?'selected':''}>${t}%</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function applyGlobalTva() {
+  const v = document.getElementById('tvaGlobal').value;
+  if (v === '') return;
+  lines.forEach(l => l.tva = +v);
+  renderLinesEditor();
+  render();
+}
+
+function calc() {
+  const franchise = document.getElementById('franchise').checked;
+  let ht = 0, tva = 0;
+  const details = lines.map(l => {
+    const lineHt = (l.qte || 0) * (l.prix || 0);
+    const rate = franchise ? 0 : (l.tva || 0);
+    const lineTva = lineHt * rate / 100;
+    ht += lineHt; tva += lineTva;
+    return { ...l, lineHt, lineTva, rate };
+  });
+  const remise = +document.getElementById('remise').value || 0;
+  const htNet = Math.max(0, ht - remise);
+  const ratio = ht > 0 ? htNet / ht : 1;
+  tva = tva * ratio;
+  return { details, ht, remise, htNet, tva, ttc: htNet + tva };
+}
+
+function buildMentions() {
+  const parts = [];
+  if (document.getElementById('franchise').checked) {
+    parts.push('TVA non applicable, art. 293 B du CGI.');
+  }
+  if (document.getElementById('autoEnt').checked) {
+    parts.push('Dispensé d\'immatriculation au RCS / RM en tant qu\'auto-entrepreneur.');
+  }
+  const custom = document.getElementById('mentionsCustom').value.trim();
+  if (custom) parts.push(custom);
+  if (mode === 'facture') {
+    parts.push('En cas de retard de paiement, une pénalité de 3 fois le taux d\'intérêt légal sera appliquée, ainsi qu\'une indemnité forfaitaire de 40 € pour frais de recouvrement (art. L441-10 et D441-5 du Code de commerce).');
+  } else {
+    parts.push('Devis valable jusqu\'à la date indiquée. Acceptation par signature ou bon pour accord.');
+  }
+  return parts.join('\n');
+}
+
+function render() {
+  const c = calc();
+  const title = mode === 'facture' ? 'FACTURE' : 'DEVIS';
+  const dateLabel = mode === 'facture' ? 'Échéance' : 'Validité';
+  const html = `
+    <div class="doc-header">
+      <div>
+        <div class="doc-emitter">
+          <strong>${esc(document.getElementById('emNom').value) || 'Votre nom'}</strong>
+          ${esc(document.getElementById('emAdr').value)}
+          ${document.getElementById('emSiret').value ? '\nSIRET : ' + esc(document.getElementById('emSiret').value) : ''}
+          ${document.getElementById('emEmail').value ? '\n' + esc(document.getElementById('emEmail').value) : ''}
+          ${document.getElementById('emTel').value ? '\n' + esc(document.getElementById('emTel').value) : ''}
+          ${document.getElementById('emIban').value ? '\nIBAN : ' + esc(document.getElementById('emIban').value) : ''}
+        </div>
+      </div>
+      <div class="doc-meta">
+        <div class="doc-title">${title}</div>
+        <div class="doc-meta-line">N° ${esc(document.getElementById('numero').value)}</div>
+        <div class="doc-meta-line">Date : ${esc(document.getElementById('date').value)}</div>
+        <div class="doc-meta-line">${dateLabel} : ${esc(document.getElementById('echeance').value)}</div>
+      </div>
+    </div>
+    <div class="doc-parties">
+      <div class="party-box">
+        <div class="party-label">Émetteur</div>
+        <strong>${esc(document.getElementById('emNom').value) || '—'}</strong>
+        ${esc(document.getElementById('emAdr').value)}
+      </div>
+      <div class="party-box">
+        <div class="party-label">Client</div>
+        <strong>${esc(document.getElementById('clNom').value) || '—'}</strong>
+        ${esc(document.getElementById('clAdr').value)}
+        ${document.getElementById('clEmail').value ? '\n' + esc(document.getElementById('clEmail').value) : ''}
+      </div>
+    </div>
+    <table class="lines">
+      <thead>
+        <tr>
+          <th>Désignation</th>
+          <th class="num">Qté</th>
+          <th class="num">P.U. HT</th>
+          <th class="num">TVA</th>
+          <th class="num">Total HT</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${c.details.map(l => `
+          <tr>
+            <td>${esc(l.designation) || '—'}</td>
+            <td class="num">${l.qte}</td>
+            <td class="num">${fmt(l.prix)}</td>
+            <td class="num">${l.rate}%</td>
+            <td class="num">${fmt(l.lineHt)}</td>
+          </tr>
+        `).join('') || '<tr><td colspan="5">Aucune ligne</td></tr>'}
+      </tbody>
+    </table>
+    <div class="totals">
+      <div class="totals-box">
+        <div class="totals-row"><span>Total HT</span><span>${fmt(c.ht)}</span></div>
+        ${c.remise > 0 ? `<div class="totals-row"><span>Remise</span><span>- ${fmt(c.remise)}</span></div>
+        <div class="totals-row"><span>Net HT</span><span>${fmt(c.htNet)}</span></div>` : ''}
+        <div class="totals-row"><span>TVA</span><span>${fmt(c.tva)}</span></div>
+        <div class="totals-row ttc"><span>Total TTC</span><span>${fmt(c.ttc)}</span></div>
+      </div>
+    </div>
+    ${document.getElementById('notes').value.trim() ? `<div class="notes-block"><strong>Notes</strong><br>${esc(document.getElementById('notes').value)}</div>` : ''}
+    <div class="mentions">${esc(buildMentions()).replace(/\n/g, '<br>')}</div>
+  `;
+  document.getElementById('docContent').innerHTML = html;
+  // Keep watermark in demo
+  let wm = document.querySelector('.doc-watermark');
+  if (!IS_PRO) {
+    if (!wm) {
+      wm = document.createElement('div');
+      wm.className = 'doc-watermark';
+      wm.innerHTML = '<span>FactureKit démo</span>';
+      document.getElementById('doc').prepend(wm);
+    }
+  } else if (wm) wm.remove();
+}
+
+function getFormData() {
+  return {
+    id: currentId || ('d_' + Date.now()),
+    mode, numero: document.getElementById('numero').value,
+    date: document.getElementById('date').value,
+    echeance: document.getElementById('echeance').value,
+    emNom: document.getElementById('emNom').value,
+    emAdr: document.getElementById('emAdr').value,
+    emSiret: document.getElementById('emSiret').value,
+    emEmail: document.getElementById('emEmail').value,
+    emTel: document.getElementById('emTel').value,
+    emIban: document.getElementById('emIban').value,
+    clNom: document.getElementById('clNom').value,
+    clAdr: document.getElementById('clAdr').value,
+    clEmail: document.getElementById('clEmail').value,
+    lines: JSON.parse(JSON.stringify(lines)),
+    remise: document.getElementById('remise').value,
+    franchise: document.getElementById('franchise').checked,
+    autoEnt: document.getElementById('autoEnt').checked,
+    notes: document.getElementById('notes').value,
+    mentionsCustom: document.getElementById('mentionsCustom').value,
+    updatedAt: new Date().toISOString()
+  };
+}
+
+function loadFormData(d) {
+  currentId = d.id;
+  mode = d.mode || 'facture';
+  document.getElementById('btnFacture').classList.toggle('active', mode === 'facture');
+  document.getElementById('btnDevis').classList.toggle('active', mode === 'devis');
+  document.getElementById('labelEcheance').textContent = mode === 'facture' ? "Date d'échéance" : 'Validité jusqu\'au';
+  ['numero','date','echeance','emNom','emAdr','emSiret','emEmail','emTel','emIban','clNom','clAdr','clEmail','remise','notes','mentionsCustom'].forEach(k => {
+    if (document.getElementById(k) && d[k] !== undefined) document.getElementById(k).value = d[k];
+  });
+  document.getElementById('franchise').checked = !!d.franchise;
+  document.getElementById('autoEnt').checked = d.autoEnt !== false;
+  lines = (d.lines && d.lines.length) ? d.lines : [defaultLine()];
+  if (!IS_PRO) lines = lines.slice(0, MAX_LINES);
+  renderLinesEditor();
+  render();
+  refreshDraftsList();
+}
+
+function getDrafts() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+}
+function setDrafts(arr) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+}
+
+function saveDraft() {
+  const data = getFormData();
+  currentId = data.id;
+  let drafts = getDrafts();
+  const idx = drafts.findIndex(d => d.id === data.id);
+  if (idx >= 0) drafts[idx] = data; else drafts.unshift(data);
+  setDrafts(drafts);
+  // save profile (emitter)
+  localStorage.setItem(PROFILE_KEY, JSON.stringify({
+    emNom: data.emNom, emAdr: data.emAdr, emSiret: data.emSiret,
+    emEmail: data.emEmail, emTel: data.emTel, emIban: data.emIban,
+    franchise: data.franchise, autoEnt: data.autoEnt
+  }));
+  refreshDraftsList();
+  alert('Brouillon enregistré localement.');
+}
+
+function refreshDraftsList() {
+  const drafts = getDrafts();
+  const el = document.getElementById('draftsList');
+  if (!drafts.length) { el.innerHTML = '<div style="color:var(--muted);font-size:0.8rem">Aucun brouillon</div>'; return; }
+  el.innerHTML = drafts.map(d => `
+    <div class="draft-item ${d.id===currentId?'active':''}" onclick="loadFormData(getDrafts().find(x=>x.id==='${d.id}'))">
+      <span>${esc(d.numero)} — ${esc(d.clNom)||'Sans client'}</span>
+      <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteDraft('${d.id}')">✕</button>
+    </div>
+  `).join('');
+}
+
+function deleteDraft(id) {
+  setDrafts(getDrafts().filter(d => d.id !== id));
+  if (currentId === id) currentId = null;
+  refreshDraftsList();
+}
+
+function newDoc() {
+  currentId = null;
+  document.getElementById('date').value = today();
+  document.getElementById('echeance').value = addDays(today(), mode === 'facture' ? 30 : 30);
+  document.getElementById('numero').value = suggestNumero();
+  document.getElementById('clNom').value = '';
+  document.getElementById('clAdr').value = '';
+  document.getElementById('clEmail').value = '';
+  document.getElementById('remise').value = 0;
+  document.getElementById('notes').value = '';
+  lines = [defaultLine()];
+  // restore profile
+  try {
+    const p = JSON.parse(localStorage.getItem(PROFILE_KEY) || '{}');
+    Object.keys(p).forEach(k => {
+      const el = document.getElementById(k);
+      if (el) {
+        if (el.type === 'checkbox') el.checked = !!p[k];
+        else el.value = p[k];
+      }
+    });
+  } catch {}
+  renderLinesEditor();
+  render();
+  refreshDraftsList();
+}
+
+function printDoc() { window.print(); }
+
+function toggleMobilePreview() {
+  document.getElementById('previewPane').classList.toggle('show-mobile');
+}
+
+// Init
+document.getElementById('date').value = today();
+document.getElementById('echeance').value = addDays(today(), 30);
+lines = [
+  { designation: 'Prestation de conseil', qte: 1, prix: 450, tva: 20 },
+  { designation: 'Frais de déplacement', qte: 1, prix: 35, tva: 20 }
+];
+document.getElementById('emNom').value = 'Alex Martin';
+document.getElementById('emAdr').value = '8 avenue Victor Hugo\n69002 Lyon';
+document.getElementById('emSiret').value = '123 456 789 00012';
+document.getElementById('emEmail').value = 'alex@exemple.fr';
+document.getElementById('emTel').value = '06 00 00 00 00';
+document.getElementById('clNom').value = 'Studio Pixel SARL';
+document.getElementById('clAdr').value = '15 rue des Lilas\n69003 Lyon';
+document.getElementById('numero').value = suggestNumero();
+['emNom','emAdr','emSiret','emEmail','emTel','emIban','clNom','clAdr','clEmail','numero','date','echeance'].forEach(id => {
+  document.getElementById(id).addEventListener('input', render);
+});
+renderLinesEditor();
+render();
+refreshDraftsList();
+</script>
+</body>
+</html>
