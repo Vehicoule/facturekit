@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FactureKit — Factures & devis FR hors-ligne · 9,90 €</title>
-<meta name="description" content="Générez factures et devis conformes pour auto-entrepreneurs. 100 % hors-ligne, paiement unique 9,90 €. Essai gratuit.">
+<meta name="description" content="Factures & devis FR. Offline. 9,90 € une fois. Générateur local pour freelances & AE — démo gratuite.">
 <style>
 :root {
   --bg: #0a0e14;
@@ -154,18 +154,18 @@ footer a:hover { color: var(--text); }
     <div class="logo">Facture<span>Kit</span></div>
     <div class="nav-links">
       <a class="btn btn-ghost" href="app/index.html">Essayer la démo</a>
-      <a class="btn btn-primary" href="#acheter">Acheter — 9,90 €</a>
+      <a class="btn btn-primary" href="https://paypal.me/Vehicoule/9.90" target="_blank" rel="noopener">Payer 9,90 €</a>
     </div>
   </nav>
 
   <section class="hero">
     <div>
       <div class="eyebrow">100 % hors-ligne · Paiement unique</div>
-      <h1>Factures & devis FR <em>propres</em>, sans abonnement.</h1>
-      <p class="lead">FactureKit est un générateur local pour freelances et auto-entrepreneurs. Mentions légales FR, TVA, aperçu A4, export PDF via impression — zéro cloud, zéro API payante.</p>
+      <h1>Factures & devis FR. Offline. <em>9,90 € une fois.</em></h1>
+      <p class="lead">FactureKit — générateur local pour freelances &amp; AE. Mentions légales, TVA, aperçu A4, PDF via impression. Zéro cloud, zéro abo.</p>
       <div class="hero-cta">
-        <a class="btn btn-primary btn-lg" href="app/index.html">Essayer la démo gratuite</a>
-        <a class="btn btn-ghost btn-lg" href="#acheter">Acheter Pro — 9,90 €</a>
+        <a class="btn btn-primary btn-lg" href="app/index.html">Essayer la démo</a>
+        <a class="btn btn-ghost btn-lg" href="https://paypal.me/Vehicoule/9.90" target="_blank" rel="noopener">Payer 9,90 €</a>
       </div>
       <p class="trust">✓ Fonctionne offline &nbsp;·&nbsp; ✓ Données sur votre navigateur &nbsp;·&nbsp; ✓ Prêt à imprimer / PDF</p>
     </div>
@@ -219,7 +219,7 @@ footer a:hover { color: var(--text); }
       <div class="card">
         <div class="icon">🔒</div>
         <h3>100 % hors-ligne</h3>
-        <p>Ouvrez index.html dans votre navigateur. Broullons en localStorage. Aucune donnée envoyée, aucun compte obligatoire.</p>
+        <p>Ouvrez index.html dans votre navigateur. Brouillons en localStorage. Aucune donnée envoyée, aucun compte obligatoire.</p>
       </div>
       <div class="card">
         <div class="icon">⚡</div>
@@ -235,22 +235,15 @@ footer a:hover { color: var(--text); }
     <div class="pricing">
       <div class="eyebrow">Licence Pro — usage perso / freelance</div>
       <div class="price">9,90 € <small>TTC · une fois</small></div>
-      <p class="price-note">Pas d'abonnement. PayPal arrive bientôt — inscrivez-vous à la liste.</p>
-      <ul class="features">
+      <p class="price-note"><strong>9,90 € TTC · paiement unique.</strong> Pas d’abo. Lien PayPal dès ouverture — laisse ton e-mail.</p>
+<ul class="features">
         <li>Lignes illimitées, sans filigrane</li>
-        <li>3 modèles : Classique, Minimal, Bold</li>
-        <li>Logo (stocké en local)</li>
-        <li>Catalogue produits réutilisable</li>
-        <li>Export / import JSON</li>
-        <li>Mises à jour mineures incluses</li>
+        <li>3 modèles · logo local · catalogue produits</li>
+        <li>Export / import JSON · MAJ mineures incluses</li>
       </ul>
-      <a class="btn btn-primary btn-lg" href="#waitlist" onclick="document.getElementById('waitEmail').focus()">Acheter — lien PayPal bientôt</a>
-      <div class="waitlist" id="waitlist">
-        <label for="waitEmail" style="display:block;text-align:left;font-size:0.85rem;color:var(--muted);margin-bottom:0.35rem">Liste d'attente — laissez votre e-mail</label>
-        <input type="email" id="waitEmail" placeholder="vous@exemple.fr" autocomplete="email">
-        <button class="btn btn-primary" style="width:100%" type="button" onclick="joinWaitlist()">Me prévenir dès que PayPal est prêt</button>
-        <div id="waitConfirm">✓ Merci ! Vous êtes sur la liste. On vous écrit dès l'ouverture des ventes.</div>
-        <p class="mailto-alt">Ou écrivez-nous : <a href="mailto:hello@facturekit.fr?subject=FactureKit%20Pro%20—%20intérêt&body=Bonjour%2C%20je%20souhaite%20acheter%20FactureKit%20Pro%20(9%2C90%20€).">hello@facturekit.fr</a></p>
+      <a class="btn btn-primary btn-lg" href="https://paypal.me/Vehicoule/9.90" target="_blank" rel="noopener">Payer 9,90 €</a>
+      <!-- PAYPAL_URL_HERE: replace href below when Matéo unlocks PayPal -->
+<p class="mailto-alt">Optionnel : <a href="mailto:hello@facturekit.fr?subject=FactureKit%20Pro%20—%20intérêt&body=Bonjour%2C%20je%20souhaite%20acheter%20FactureKit%20Pro%20(9%2C90%20€).">hello@facturekit.fr</a></p>
       </div>
       <p style="margin-top:1rem"><a class="btn btn-ghost" href="app/index.html">D'abord essayer la démo gratuite →</a></p>
     </div>
@@ -286,7 +279,8 @@ footer a:hover { color: var(--text); }
   <div class="cta-band">
     <h2>Prêt à facturer en 2 minutes ?</h2>
     <p style="color:var(--muted);margin-bottom:1.25rem">Testez la démo, puis passez Pro pour 9,90 €.</p>
-    <a class="btn btn-primary btn-lg" href="app/index.html">Essayer la démo gratuite</a>
+    <a class="btn btn-ghost btn-lg" href="app/index.html">Essayer la démo</a>
+      <a class="btn btn-primary btn-lg" id="pay-band" href="https://paypal.me/Vehicoule/9.90" target="_blank" rel="noopener">Payer 9,90 €</a>
   </div>
 
   <footer>
@@ -297,25 +291,9 @@ footer a:hover { color: var(--text); }
       <a href="app/index.html">Démo</a>
       <a href="mailto:hello@facturekit.fr">Contact</a>
     </div>
-    <p>© 2026 FactureKit — Produit numérique indépendant. Mentions légales simplifiées : éditeur particulier, France. Pas de cookies publicitaires. Paiement PayPal à venir.</p>
+    <p>© 2026 FactureKit — Produit numérique indépendant. Mentions légales simplifiées : éditeur particulier, France. Pas de cookies publicitaires. Paiement via PayPal.me/Vehicoule.</p>
   </footer>
 </div>
-<script>
-function joinWaitlist() {
-  const input = document.getElementById('waitEmail');
-  const email = (input.value || '').trim();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    alert('Veuillez entrer une adresse e-mail valide.');
-    input.focus();
-    return;
-  }
-  let list = [];
-  try { list = JSON.parse(localStorage.getItem('facturekit_waitlist') || '[]'); } catch {}
-  if (!list.includes(email)) list.push(email);
-  localStorage.setItem('facturekit_waitlist', JSON.stringify(list));
-  document.getElementById('waitConfirm').style.display = 'block';
-  input.value = '';
-}
-</script>
+
 </body>
 </html>
